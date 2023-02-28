@@ -8,4 +8,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="esto es el fragment cotizaciones" />
+    <TextView
+        android:id="@+id/txt_fecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="fecha seleccionada" />
+    <TextView
+        android:id="@+id/txt_compra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="valor de compra" />
+    <TextView
+        android:id="@+id/txt_venta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="valor de venta" />
 </LinearLayout>

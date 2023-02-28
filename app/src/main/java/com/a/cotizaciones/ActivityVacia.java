@@ -9,8 +9,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ActivityVacia extends AppCompatActivity {
-    //queue es una cola donde se van agregando los request
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
