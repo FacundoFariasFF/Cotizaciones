@@ -35,7 +35,10 @@ public class ObtenerDatosEndPoint {
         */}
         //al final del url se puede modificar la fecha para obtener menos rango de datos
         // Ejemplo: (https://mercados.ambito.com//dolar/formal/historico-general/03-01-2023/06-01-2023)
-        String url = "https://mercados.ambito.com//dolar/formal/historico-general/01-02-2023/01-01-2030";
+
+        String fechaMin= MainActivity.fechaMenosSieteDias;
+        String fechaMax = "01-01-2030";
+        String url = "https://mercados.ambito.com//dolar/formal/historico-general/"+fechaMin+"/"+fechaMax;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             try {
                 String fecha ;
@@ -47,7 +50,6 @@ public class ObtenerDatosEndPoint {
                     compra = mJsonArray.getString(1);
                     venta = mJsonArray.getString(2);
                     //recorremos el JSON y enviamos a Registrar() los datos para cargar una Base de Datos.
-
                     AdminSQLiteOpenHelper.getInstance(context).Registrar(fecha,compra,venta);
                 }
 
