@@ -80,6 +80,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
             open();
             Cursor fila = BaseDeDatos.rawQuery("SELECT compra, venta FROM historico WHERE fecha='" + db_fecha_cal + "'", null);
             // lo siguiente retorna true si encuentra datos dentro de la "tabla" y los muestra en pantalla
+
             if (fila.moveToFirst()) {
                 fecha = (db_fecha_cal);
                 compra = (fila.getString(0));
@@ -89,8 +90,12 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 compra = "No hay valores registrados" ;
                 venta = "No hay valores registrados";
             }
-            FragmentCotizacion cotizacion = new FragmentCotizacion();
-            cotizacion.MostrarFecha(fecha, compra, venta);
+            //FragmentCotizacion cotizacion = new FragmentCotizacion();
+            //cotizacion.MostrarFecha(fecha, compra, venta);
+
+
+
+
             close();
         }
     }

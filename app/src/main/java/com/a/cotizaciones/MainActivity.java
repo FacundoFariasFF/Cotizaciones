@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener listener;
     MenuItem itemMonedas;
 
-    String fechaHoy, fechaSelec= "";
+    String fechaHoy,fechaSelec, fechaSelecAux= "";
     static String fechaMenosSieteDias;
 
 
@@ -45,11 +46,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
+
+
         viewPager2= findViewById(R.id.view_pager2);
         adaptadorFragment=new AdaptadorFragment(getSupportFragmentManager(),getLifecycle());
         //cuando se crea un objeto de clase AdaptadorFragment le pasamos el FragmentManager y el ciclo de vida del activity
         viewPager2.setAdapter(adaptadorFragment);
-        
+
+
 
         RangoFecha();
         ObtenerDatosEndPoint obtenerDatosEndPoint = new ObtenerDatosEndPoint();
@@ -60,21 +64,21 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendarioAux = Calendar.getInstance();
         //Formato de la fecha
         DateFormat formateador = new SimpleDateFormat("dd-MM-yyyy");
-        if (fechaSelec.equals("")){
+        if (fechaSelecAux.equals("")){
             calendarioAux.add(Calendar.DATE, -7);
             fechaMenosSieteDias= (formateador.format(calendarioAux.getTime()));
 
         } else {
             try {
-                calendarioAux.setTime(formateador.parse(fechaSelec));
+                calendarioAux.setTime(formateador.parse(fechaSelecAux));
                 calendarioAux.add(Calendar.DATE, -7);
-                fechaMenosSieteDias= (formateador.format(calendarioAux.getTime()));
+                fechaMenosSieteDias = (formateador.format(calendarioAux.getTime()));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
         }
     }
-
+// Fragment
     class AdaptadorFragment extends FragmentStateAdapter{
         public AdaptadorFragment(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
             super(fragmentManager, lifecycle);
@@ -132,9 +136,6 @@ public class MainActivity extends AppCompatActivity {
         int month = calendario.get(Calendar.MONTH);
         int dayOfMonth = calendario.get(Calendar.DAY_OF_MONTH);
         fechaHoy = dayOfMonth + "/" + (month+1) + "/" + year;
-
-
-
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
@@ -160,7 +161,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 //tener en cuenta  usamos "/" o "-" ya que usamos fechaSelec para comparar drectamente con el Json (hay que poner el mismo que use el Json)
                 fechaSelec = dia + "/" + mes + "/" + anio;
+                fechaSelecAux = dia + "-" + mes + "-" + anio;
 
+                RangoFecha();
                 AdminSQLiteOpenHelper.getInstance(getApplicationContext()).Buscar(fechaSelec);
 
                 Toast.makeText(MainActivity.this,dayOfMonth+"/"+(month+1)+"/"+year,Toast.LENGTH_SHORT).show();

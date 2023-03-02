@@ -2,25 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/texto_cotizaciones"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pagerFechasCotizaciones"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="esto es el fragment cotizaciones" />
-    <TextView
-        android:id="@+id/txt_fecha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="fecha seleccionada" />
-    <TextView
-        android:id="@+id/txt_compra"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="valor de compra" />
-    <TextView
-        android:id="@+id/txt_venta"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="valor de venta" />
+        android:layout_height="match_parent"/>
+
+
 </LinearLayout>
