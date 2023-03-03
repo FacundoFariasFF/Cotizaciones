@@ -28,13 +28,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
-    private ViewPager2 viewPager2;
-    private AdaptadorFragment adaptadorFragment;
+
 
     private DatePickerDialog.OnDateSetListener listener;
     MenuItem itemMonedas;
-
-
 
 
     @Override
@@ -46,37 +43,19 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        viewPager2= findViewById(R.id.view_pager2);
-        adaptadorFragment=new AdaptadorFragment(getSupportFragmentManager(),getLifecycle());
-        //cuando se crea un objeto de clase AdaptadorFragment le pasamos el FragmentManager y el ciclo de vida del activity
-        viewPager2.setAdapter(adaptadorFragment);
 
-        RangoFecha("00-00-0000");
+        // Asignmos el fragment FragmentWhatsapp al FramrLayout frame
+      // getSupportFragmentManager().beginTransaction().replace(R.id.fragment_main, new FragmentMonedas()).commit();
+
+       // RangoFecha("00-00-0000");
 
 
     }
 
 // Fragment
-   class AdaptadorFragment extends FragmentStateAdapter{
-        public AdaptadorFragment(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
-            super(fragmentManager, lifecycle);
-        }
-        @NonNull
-        @Override
-        public Fragment createFragment(int position) {
-            switch (position){
-                case 1: return new FragmentWhatsapp();
-                default: return new FragmentCotizacion();
-            }
-        }
-        @Override
-        //devuelve la cantidad de fragmentos que usamos
-        public int getItemCount() {
-            return 2;
-        }
-    }
 
-    // menu
+
+ // menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
@@ -98,10 +77,12 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"abrir monedas",Toast.LENGTH_SHORT).show();
                 SeleccionMoneda alert = new SeleccionMoneda();
                 alert.showDialog(MainActivity.this, "mensaje de prueba");
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_main, new FragmentMonedas()).commit();
+
                 return true;
             case R.id.menu_whatsapp:
                 Toast.makeText(MainActivity.this,"abrir whatsapp",Toast.LENGTH_SHORT).show();
-                viewPager2.setCurrentItem(1,true);
+                //viewPager2.setCurrentItem(1,true);
                 return true;
             default:
                 return  super.onOptionsItemSelected(item);
@@ -114,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         String fechaMenosSieteDias ="00-00-0000";
         Date datefechaSelecAux;
         Date datefechaMenosSieteDias;
-
+        int op = 1;
         Calendar calendarioAux = Calendar.getInstance();
         //Formato de la fecha
         DateFormat formateador = new SimpleDateFormat("dd-MM-yyyy");
@@ -123,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             calendarioAux.add(Calendar.DATE, -7);
             fechaMenosSieteDias= (formateador.format(calendarioAux.getTime()));
 
-            obtenerDatosEndPoint.ObtenerDatosVolley(this, fechaMenosSieteDias);
+            obtenerDatosEndPoint.ObtenerDatosVolleyFechas(this, fechaMenosSieteDias);
         } else {
             SimpleDateFormat formateador1 = new SimpleDateFormat("dd-MM-yyyy");
             try {
@@ -141,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 // asignamos a fechaMenosSieteDias la fecha seleccionada menos 7 dias
                 fechaMenosSieteDias= (formateador.format(datefechaSelecAux.getTime()-7));
 
-                obtenerDatosEndPoint.ObtenerDatosVolley(this, fechaMenosSieteDias);
+                obtenerDatosEndPoint.ObtenerDatosVolleyFechas(this, fechaMenosSieteDias);
             }
         }
     }

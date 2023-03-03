@@ -7,8 +7,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,12 +20,15 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.AbstractCollection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ObtenerDatosEndPoint {
     private RequestQueue queue;
-    public void ObtenerDatosVolley(Context context, String fechaMenosSieteDias){
+    public void ObtenerDatosVolleyFechas(Context context, String fechaMenosSieteDias){
         queue = Volley.newRequestQueue(context);
         //endpoint que contiene los valores historicos del Dolar Oficial.
         {/* (Estructura del JSON)(JSON Array con Arrays dentro)
@@ -60,5 +66,7 @@ public class ObtenerDatosEndPoint {
         });
         queue.add(request);
     }
+
+
 
 }

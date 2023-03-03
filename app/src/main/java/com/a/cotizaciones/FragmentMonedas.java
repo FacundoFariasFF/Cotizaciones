@@ -1,17 +1,11 @@
 package com.a.cotizaciones;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -27,47 +21,36 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentCotizacion extends Fragment {
-
+public class FragmentMonedas extends Fragment {
     private RequestQueue queue;
 
-    ViewPager2 viewPagerFechasCotizaciones;
-
     RecyclerView recyclerView;
-
-    List<FechasCotizaciones> fechasCotizacionesList;
-
     List<Monedas> monedasList;
-
     MonedasAdapter adapter;
-    FechasCotizacionesAdapter adapter1;
 
-    @SuppressLint("MissingInflatedId")
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.fragment_cotizacion,container,false);
+    View rootView;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        rootView = inflater.inflate(R.layout.fragment_monedas,container,false);
 
-        recyclerView = v.findViewById(R.id.recycler);
+        recyclerView = rootView.findViewById(R.id.recycler);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        //ArrayList<Monedas> monedas = new ObtenerDatosEndPoint().ObtenerDatosVolleyMonedas(getActivity());
-
         monedasList = new ArrayList<>();
 
-        adapter = new MonedasAdapter(getContext(),monedasList);
+        adapter = new MonedasAdapter(getActivity(),monedasList);
 
         recyclerView.setAdapter(adapter);
 
         queue = Volley.newRequestQueue(getActivity());
-
+        SeleccionMoneda seleccionMoneda = new SeleccionMoneda();
+        seleccionMoneda.Check();
         ObtenerDatosVolleyMonedas();
-        //viewPagerFechasCotizaciones = v.findViewById(R.id.view_pagerFechasCotizaciones);
-        //viewPagerFechasCotizaciones.setAdapter(new FechasCotizacionesAdapter(this.getContext(),fechasCotizacionesList));
-        return v;
+
+
+        return rootView;
     }
 
     public void ObtenerDatosVolleyMonedas(){
@@ -104,26 +87,11 @@ public class FragmentCotizacion extends Fragment {
                 }
                 adapter = new MonedasAdapter(getActivity(),monedasList);
                 recyclerView.setAdapter(adapter);
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }, error -> {
-
         });
         queue.add(request);
     }
-    public void MostrarFecha(String fecha, String compra, String venta){
-
-        fechasCotizacionesList = new ArrayList<>();
-        ////
-        FechasCotizaciones fechasCotizaciones = new FechasCotizaciones(fecha,compra,venta);
-        fechasCotizacionesList.add(fechasCotizaciones);
-        ////
-
-        adapter1 = new FechasCotizacionesAdapter(this.getContext(),fechasCotizacionesList);
-        recyclerView.setAdapter(adapter);
-
-    }
-
 }
