@@ -5,7 +5,6 @@ public class FechasCotizaciones {
     String compra;
     String venta;
 
-
     public FechasCotizaciones(String fecha, String compra, String venta){
         this.fecha = fecha;
         this.compra = compra;

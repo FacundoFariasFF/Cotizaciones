@@ -22,7 +22,7 @@ import java.util.AbstractCollection;
 
 public class ObtenerDatosEndPoint {
     private RequestQueue queue;
-    public void ObtenerDatosVolley(Context context){
+    public void ObtenerDatosVolley(Context context, String fechaMenosSieteDias){
         queue = Volley.newRequestQueue(context);
         //endpoint que contiene los valores historicos del Dolar Oficial.
         {/* (Estructura del JSON)(JSON Array con Arrays dentro)
@@ -36,7 +36,7 @@ public class ObtenerDatosEndPoint {
         //al final del url se puede modificar la fecha para obtener menos rango de datos
         // Ejemplo: (https://mercados.ambito.com//dolar/formal/historico-general/03-01-2023/06-01-2023)
 
-        String fechaMin= MainActivity.fechaMenosSieteDias;
+        String fechaMin= fechaMenosSieteDias;
         String fechaMax = "01-01-2030";
         String url = "https://mercados.ambito.com//dolar/formal/historico-general/"+fechaMin+"/"+fechaMax;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {

@@ -4,10 +4,19 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+    <TextView
+        android:id="@+id/texto_whatsapp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="esto es el fragment cotizacion"/>
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pagerFechasCotizaciones"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>

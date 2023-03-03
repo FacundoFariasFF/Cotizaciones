@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
 
 
 //esta class administra la db
@@ -71,16 +72,16 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
     }
 
     public void Buscar(String db_fecha_cal) {
+
         String fecha;
         String compra;
         String venta;
-
         //creamos una validacion para que no este el campo fecha vacio
         if (!db_fecha_cal.isEmpty()) {
             open();
             Cursor fila = BaseDeDatos.rawQuery("SELECT compra, venta FROM historico WHERE fecha='" + db_fecha_cal + "'", null);
-            // lo siguiente retorna true si encuentra datos dentro de la "tabla" y los muestra en pantalla
 
+            // lo siguiente retorna true si encuentra datos dentro de la "tabla" y los muestra en pantalla
             if (fila.moveToFirst()) {
                 fecha = (db_fecha_cal);
                 compra = (fila.getString(0));
@@ -90,11 +91,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 compra = "No hay valores registrados" ;
                 venta = "No hay valores registrados";
             }
-            //FragmentCotizacion cotizacion = new FragmentCotizacion();
-            //cotizacion.MostrarFecha(fecha, compra, venta);
-
-
-
+            FragmentCotizacion cotizacion = new FragmentCotizacion();
+            cotizacion.MostrarFecha(fecha, compra, venta);
 
             close();
         }

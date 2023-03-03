@@ -22,6 +22,7 @@ import java.text.BreakIterator;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -33,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener listener;
     MenuItem itemMonedas;
 
-    String fechaHoy,fechaSelec, fechaSelecAux= "";
-    static String fechaMenosSieteDias;
+
 
 
     @Override
@@ -46,40 +46,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-
-
         viewPager2= findViewById(R.id.view_pager2);
         adaptadorFragment=new AdaptadorFragment(getSupportFragmentManager(),getLifecycle());
         //cuando se crea un objeto de clase AdaptadorFragment le pasamos el FragmentManager y el ciclo de vida del activity
         viewPager2.setAdapter(adaptadorFragment);
 
+        RangoFecha("00-00-0000");
 
-
-        RangoFecha();
-        ObtenerDatosEndPoint obtenerDatosEndPoint = new ObtenerDatosEndPoint();
-        obtenerDatosEndPoint.ObtenerDatosVolley(this);
 
     }
-    public void RangoFecha(){
-        Calendar calendarioAux = Calendar.getInstance();
-        //Formato de la fecha
-        DateFormat formateador = new SimpleDateFormat("dd-MM-yyyy");
-        if (fechaSelecAux.equals("")){
-            calendarioAux.add(Calendar.DATE, -7);
-            fechaMenosSieteDias= (formateador.format(calendarioAux.getTime()));
 
-        } else {
-            try {
-                calendarioAux.setTime(formateador.parse(fechaSelecAux));
-                calendarioAux.add(Calendar.DATE, -7);
-                fechaMenosSieteDias = (formateador.format(calendarioAux.getTime()));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 // Fragment
-    class AdaptadorFragment extends FragmentStateAdapter{
+   class AdaptadorFragment extends FragmentStateAdapter{
         public AdaptadorFragment(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
             super(fragmentManager, lifecycle);
         }
@@ -129,8 +107,47 @@ public class MainActivity extends AppCompatActivity {
                 return  super.onOptionsItemSelected(item);
         }
     }
+///
+    public void RangoFecha(String fechaSelecAux){
+        ObtenerDatosEndPoint obtenerDatosEndPoint = new ObtenerDatosEndPoint();
+
+        String fechaMenosSieteDias ="00-00-0000";
+        Date datefechaSelecAux;
+        Date datefechaMenosSieteDias;
+
+        Calendar calendarioAux = Calendar.getInstance();
+        //Formato de la fecha
+        DateFormat formateador = new SimpleDateFormat("dd-MM-yyyy");
+
+        if (fechaSelecAux.equals("00-00-0000")){
+            calendarioAux.add(Calendar.DATE, -7);
+            fechaMenosSieteDias= (formateador.format(calendarioAux.getTime()));
+
+            obtenerDatosEndPoint.ObtenerDatosVolley(this, fechaMenosSieteDias);
+        } else {
+            SimpleDateFormat formateador1 = new SimpleDateFormat("dd-MM-yyyy");
+            try {
+                datefechaSelecAux  = formateador1.parse(fechaSelecAux);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                datefechaMenosSieteDias  = formateador1.parse(fechaMenosSieteDias);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            //si la fecha seleccionada es menor a la fecha seleccionada anterior menos 7 dias
+            if (datefechaSelecAux.before(datefechaMenosSieteDias)){
+                // asignamos a fechaMenosSieteDias la fecha seleccionada menos 7 dias
+                fechaMenosSieteDias= (formateador.format(datefechaSelecAux.getTime()-7));
+
+                obtenerDatosEndPoint.ObtenerDatosVolley(this, fechaMenosSieteDias);
+            }
+        }
+    }
 // calendario
     public void MostrarCalendario(){
+        String fechaHoy;
         Calendar calendario = Calendar.getInstance();
         int year = calendario.get(Calendar.YEAR);
         int month = calendario.get(Calendar.MONTH);
@@ -139,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+                String fechaSelec, fechaSelecAux;
                 String dia = "";
                 String mes = "";
                 String anio = String.valueOf(year);
@@ -159,11 +177,12 @@ public class MainActivity extends AppCompatActivity {
                     dia = ""+dayOfMonth;
                     mes = ""+(month+1);
                 }
-                //tener en cuenta  usamos "/" o "-" ya que usamos fechaSelec para comparar drectamente con el Json (hay que poner el mismo que use el Json)
+                //tener en cuenta  usamos "/" o "-" ya que usamos fechaSelec para comparar drectamente con el contenido del Json (hay que poner el mismo que use el Json)
                 fechaSelec = dia + "/" + mes + "/" + anio;
+                //fechaSelecAux tiene este formato "dd-mm-aaaa" ya que se utiliza para el URL del Json
                 fechaSelecAux = dia + "-" + mes + "-" + anio;
 
-                RangoFecha();
+                RangoFecha(fechaSelecAux);
                 AdminSQLiteOpenHelper.getInstance(getApplicationContext()).Buscar(fechaSelec);
 
                 Toast.makeText(MainActivity.this,dayOfMonth+"/"+(month+1)+"/"+year,Toast.LENGTH_SHORT).show();
